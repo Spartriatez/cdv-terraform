@@ -1,4 +1,4 @@
-name: Terraform Init Plan
+name: Terraform Init Plan v2
 on:
     pull_request:
       paths:
