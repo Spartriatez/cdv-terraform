@@ -1,0 +1,42 @@
+name: Destroy Infrastructure
+on:
+  workflow_dispatch
+
+jobs:
+  Destroy:
+    runs-on: ubuntu-latest
+    env:
+      ARM_SUBSCRIPTION_ID: "130b0b18-7778-4fa6-839b-8f5bfe4aee00"
+      ARM_TENANT_ID: "b473e154-155a-487d-aacb-5f2f3d754ac2"
+      ARM_CLIENT_ID: "fe06b845-1413-4ebf-ae57-f98a7276fd28"
+      ARM_CLIENT_SECRET: "IXq8Q~.7E~Y052GLPRBjhBCkHfYYiAsni5aNSb~-"
+      application: ${{ vars.APPLICATION }}
+      owner: ${{ vars.OWNER }}
+      location: ${{ vars.LOCATION }}
+      perfix: ${{ vars.PREFIX }}
+      admin_password: ${{ secrets.ADMIN_PASSWORD }}
+      environment: ${{ vars.ENVIRONMENT }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./Terraform
+
+      - name: Terraform Destroy
+        run: |
+          terraform destroy \
+          --var="application=${{ env.application }}" \
+          --var="environments=[\"${{ env.environment }}\"]" \
+          --var="owner=${{ env.owner }}" \
+          --var="location=${{ env.location }}" \
+          --var="prefix=${{ env.perfix }}" \
+          --var="admin_password=${{ env.admin_password }}" \
+          --var="environment=${{ env.environment }}" \
+          --auto-approve
+        working-directory: ./Terraform
+
