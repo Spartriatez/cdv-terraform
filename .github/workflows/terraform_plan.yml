@@ -12,6 +12,11 @@ jobs:
     Test:
         name: Test Infrastructure
         runs-on: ubuntu-latest
+        env:
+            ARM_SUBSCRIPTION_ID: "130b0b18-7778-4fa6-839b-8f5bfe4aee00"
+            ARM_TENANT_ID: "b473e154-155a-487d-aacb-5f2f3d754ac2"
+            ARM_CLIENT_ID: "fe06b845-1413-4ebf-ae57-f98a7276fd28"
+            ARM_CLIENT_SECRET: "IXq8Q~.7E~Y052GLPRBjhBCkHfYYiAsni5aNSb~-"
         steps:
             - name: Checkout
               uses: actions/checkout@v3
