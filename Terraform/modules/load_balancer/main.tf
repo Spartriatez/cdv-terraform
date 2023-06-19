@@ -62,3 +62,20 @@ resource "azurerm_network_interface_backend_address_pool_association" "lb_backen
   backend_address_pool_id = azurerm_lb_backend_address_pool.lb_backend_pool.id
   ip_configuration_name   = "external"
 }
+
+resource "azurerm_lb_nat_rule" "web_lb_inbound_nat_rule_22" {
+  name                           = "ssh-22-vm-22"
+  protocol                       = "Tcp"
+  frontend_port                  = 22
+  backend_port                   = 22
+  frontend_ip_configuration_name = azurerm_lb.lb.frontend_ip_configuration[0].name
+  resource_group_name            = var.resource_group_name
+  loadbalancer_id                = azurerm_lb.lb.id
+}
+
+# Associate LB NAT Rule and VM Network Interface
+resource "azurerm_network_interface_nat_rule_association" "web_nic_nat_rule_associate" {
+  network_interface_id  = var.vm_nic[0]
+  ip_configuration_name   = "external"
+  nat_rule_id           = azurerm_lb_nat_rule.web_lb_inbound_nat_rule_22.id
+}

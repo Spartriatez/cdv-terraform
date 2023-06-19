@@ -51,6 +51,8 @@ resource "azurerm_linux_virtual_machine" "linux_machine" {
   admin_password                  = var.admin_password
   disable_password_authentication = false
 
+  custom_data = var.instances == 0 ? filebase64("${path.module}/fsetup.sh") : filebase64("${path.module}/bsetup.sh")
+
   os_disk {
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
